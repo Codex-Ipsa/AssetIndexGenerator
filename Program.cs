@@ -11,6 +11,7 @@ namespace AssetIndexGenerator
     internal class Program
     {
         static string customUrl = "http://codex-ipsa.dejvoss.cz/launcher/assets/resources";
+        static string manifestName = "nfc-v3.4.2_01"; //Change this to the json name
         static void Main(string[] args)
         {
             string manifest = "";
@@ -46,6 +47,9 @@ namespace AssetIndexGenerator
             manifest += "}";
             manifest += "}";
             Console.WriteLine(manifest);
+            Directory.CreateDirectory($"out/indexes");
+            File.WriteAllText($"out/indexes/{manifestName}.json", manifest);
+
             Console.ReadLine();
         }
 
