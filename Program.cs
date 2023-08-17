@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AssetIndexGenerator
+{
+    internal class Program
+    {
+        static string customUrl = "http://codex-ipsa.dejvoss.cz/launcher/assets/resources";
+        static void Main(string[] args)
+        {
+            string manifest = "";
+            manifest += "{";
+            manifest += "\"objects\": {";
+
+            Directory.CreateDirectory("resources");
+            string[] files = Directory.GetFiles("resources", "*.*", SearchOption.AllDirectories);
+            foreach (string file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                FileStream fop = File.OpenRead(file);
+                string chksum = BitConverter.ToString(System.Security.Cryptography.SHA1.Create().ComputeHash(fop)).Replace("-", "").ToLower();
+                string firstTwo = chksum.Substring(0, 2);
+
+                bool isOnServers = DoesExist($"https://resources.download.minecraft.net/{firstTwo}/{chksum}");
+
+                if(!isOnServers)
+                {
+                    Directory.CreateDirectory($"out/resources/{firstTwo}");
+                    if (!File.Exists($"out/resources/{firstTwo}/{chksum}"))
+                        File.Copy(file, $"out/resources/{firstTwo}/{chksum}");
+                }
+
+                string fileNew = file.Replace("\\", "/").Replace("resources/", "");
+                manifest += $"\"{fileNew}\": {{";
+                manifest += $"\"hash\": \"{chksum}\",";
+                manifest += $"\"size\": {fi.Length}";
+                if (!isOnServers)
+                    manifest += $",\"custom_url\": \"{customUrl}/{firstTwo}/{chksum}\"";
+                manifest += $"}},";
+            }
+            manifest += "}";
+            manifest += "}";
+            Console.WriteLine(manifest);
+            Console.ReadLine();
+        }
+
+        static bool DoesExist(string url)
+        {
+            try
+            {
+                Console.WriteLine(url);
+                WebClient wc = new WebClient();
+                string resp = wc.DownloadString(url);
+                Console.WriteLine(resp);
+                return true;
+            }
+            catch (WebException we)
+            {
+                return  false;
+            }
+        }
+    }
+}
