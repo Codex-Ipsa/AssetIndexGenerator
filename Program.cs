@@ -37,6 +37,8 @@ namespace AssetIndexGenerator
                 }
 
                 string fileNew = file.Replace("\\", "/").Replace("resources/", "");
+                Console.WriteLine("Processing " + fileNew.ToString() + "...");
+
                 manifest += $"\"{fileNew}\": {{";
                 manifest += $"\"hash\": \"{chksum}\",";
                 manifest += $"\"size\": {fi.Length}";
@@ -57,10 +59,10 @@ namespace AssetIndexGenerator
         {
             try
             {
-                Console.WriteLine(url);
+                //Console.WriteLine(url);
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(url);
-                Console.WriteLine(resp);
+                //Console.WriteLine(resp);
                 return true;
             }
             catch (WebException we)
