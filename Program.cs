@@ -11,7 +11,7 @@ namespace AssetIndexGenerator
     internal class Program
     {
         static string customUrl = "http://codex-ipsa.dejvoss.cz/launcher/assets/resources";
-        static string manifestName = "nfc-v3.4.2_01"; //Change this to the json name
+        static string manifestName = "index-name"; //Change this to the json name
         static void Main(string[] args)
         {
             string manifest = "";
@@ -20,6 +20,8 @@ namespace AssetIndexGenerator
 
             Directory.CreateDirectory("resources");
             string[] files = Directory.GetFiles("resources", "*.*", SearchOption.AllDirectories);
+
+            int i = 0;
             foreach (string file in files)
             {
                 FileInfo fi = new FileInfo(file);
@@ -37,7 +39,7 @@ namespace AssetIndexGenerator
                 }
 
                 string fileNew = file.Replace("\\", "/").Replace("resources/", "");
-                Console.WriteLine("Processing " + fileNew.ToString() + "...");
+                Console.WriteLine("Processing " + fileNew.ToString() + "...     " + i + " / " + files.Count());
 
                 manifest += $"\"{fileNew}\": {{";
                 manifest += $"\"hash\": \"{chksum}\",";
@@ -45,7 +47,11 @@ namespace AssetIndexGenerator
                 if (!isOnServers)
                     manifest += $",\"custom_url\": \"{customUrl}/{firstTwo}/{chksum}\"";
                 manifest += $"}},";
+
+                i++;
             }
+
+            manifest = manifest.Remove(manifest.Length - 1);
             manifest += "}";
             manifest += "}";
             Console.WriteLine(manifest);
@@ -65,7 +71,7 @@ namespace AssetIndexGenerator
                 //Console.WriteLine(resp);
                 return true;
             }
-            catch (WebException we)
+            catch (WebException)
             {
                 return  false;
             }
