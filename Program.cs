@@ -10,8 +10,9 @@ namespace AssetIndexGenerator
 {
     internal class Program
     {
-        static string customUrl = "http://codex-ipsa.dejvoss.cz/launcher/assets/resources";
-        static string manifestName = "index-name"; //Change this to the json name
+        static string customUrl = "http://codex-ipsa.dejvoss.cz/launcher/assets/resources"; //Change this to the url you will upload your assets to
+        static string manifestName = "af-2018-1.13"; //Change this to the json name
+
         static void Main(string[] args)
         {
             string manifest = "";
@@ -65,10 +66,8 @@ namespace AssetIndexGenerator
         {
             try
             {
-                //Console.WriteLine(url);
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(url);
-                //Console.WriteLine(resp);
                 return true;
             }
             catch (WebException)
