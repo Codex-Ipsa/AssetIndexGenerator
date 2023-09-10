@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetIndexGenerator
 {
@@ -22,6 +19,7 @@ namespace AssetIndexGenerator
                 Directory.CreateDirectory("resources");
                 Logger("Please put your resources to the .\\resources directory. Press any key to exit.");
                 Console.ReadLine();
+                Environment.Exit(0);
             }
 
             foreach(string arg in args)
