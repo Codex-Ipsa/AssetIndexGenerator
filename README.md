@@ -1,5 +1,5 @@
 # AssetIndexGenerator
-A simple tool to generate AssetIndexes for Codex-Ipsa or BetaCraft launchers.
+A simple tool to generate AssetIndexes for any Minecraft launcher.
 ## Usage
 You can either set launch arguments, or fill in the info when running the tool.
 
